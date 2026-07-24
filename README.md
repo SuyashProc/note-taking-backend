@@ -58,7 +58,7 @@ app/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/note-taking-backend.git
+git clone https://github.com/SuyashProc/note-taking-backend.git
 cd note-taking-backend
 ```
 
