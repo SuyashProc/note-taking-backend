@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.core.database import init_db
 from app.routers.home import router as home_router
 from app.routers.auth import router as auth_router
-
+from app.routers.notes import router as notes_router
 
 app = FastAPI(
     title="Note Taking API",
@@ -13,4 +13,5 @@ app = FastAPI(
 
 app.include_router(home_router) 
 app.include_router(auth_router)
+app.include_router(notes_router)
 init_db(app)

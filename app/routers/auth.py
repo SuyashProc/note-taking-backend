@@ -1,9 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.core.security import create_access_token
-from app.schemas.auth import TokenResponse, LoginRequest
+from app.models.user import User
+from app.schemas.auth import TokenResponse
 from app.schemas.user import UserCreate, UserResponse
 from app.services.auth_service import create_user, authenticate_user
+from app.dependencies.auth import get_current_user
 
 router = APIRouter(
     prefix="/auth",
@@ -30,10 +33,12 @@ async def signup(user_data: UserCreate):
     "/login",
     response_model=TokenResponse
 )
-async def login(login_data: LoginRequest):
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
     user = await authenticate_user(
-        login_data.email,
-        login_data.password
+        form_data.username,  
+        form_data.password
     )
 
     if not user:
@@ -48,4 +53,17 @@ async def login(login_data: LoginRequest):
         access_token=access_token,
         token_type="bearer"
     )
+
+
+# test router
+
+@router.get("/me")
+async def get_me(
+        current_user: User = Depends(get_current_user)
+):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email
+    }
 

@@ -32,7 +32,7 @@ def create_access_token(user_id: int) -> str:
         algorithm=ALGORITHM
     )
 
-def verify_access_token(token: str) -> int:
+def verify_access_token(token: str) -> dict | None:
     try:
         payload = jwt.decode(
             token,
